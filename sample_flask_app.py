@@ -1,6 +1,8 @@
 # Import statements necessary
 from flask import Flask, render_template
 from flask_script import Manager
+import json
+import requests
 
 # Set up application
 app = Flask(__name__)
@@ -30,8 +32,17 @@ def basic_values_list(name):
 
 
 ## PART 1: Add another route /word/<new_word> as the instructions describe.
+@app.route('/word/<new_word>')
+def get_rythme_word(new_word):
+    url='https://api.datamuse.com/words?sl='+new_word
+    word_rate_list=json.loads(requests.get(url).text)
+    if word_rate_list:
+        return '<h1>{}</h1>'.format(word_rate_list[0]['word'])
+    else:
+        return '<h1>No matched result for your key word.</h1>'
 
 
+    
 ## PART 2: Edit the following route so that the photo_tags.html template will render
 @app.route('/flickrphotos/<tag>/<num>')
 def photo_titles(tag, num):
